@@ -1,0 +1,77 @@
+﻿@page "/"
+@using global::GarageAI.Application.Dashboard.DTOs
+@using global::GarageAI.Web.Services
+
+
+
+@inject DashboardApiService DashboardApiService
+
+<PageTitle>Dashboard</PageTitle>
+
+<h2 class="mb-4">Garage Dashboard</h2>
+
+@if (dashboard is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="row g-3">
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h1>@dashboard.Customers</h1>
+                    <h5>Customers</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h1>@dashboard.Vehicles</h1>
+                    <h5>Vehicles</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h1>@dashboard.BookingsToday</h1>
+                    <h5>Today's Bookings</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h1>@dashboard.AvailableMechanics</h1>
+                    <h5>Available Mechanics</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h1>@dashboard.ActiveServicePackages</h1>
+                    <h5>Active Packages</h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+@code {
+
+    private DashboardDto? dashboard;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dashboard = await DashboardApiService.GetDashboardAsync();
+    }
+}

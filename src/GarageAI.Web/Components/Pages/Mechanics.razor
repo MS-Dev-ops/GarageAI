@@ -1,0 +1,47 @@
+﻿@page "/mechanics"
+@using global::GarageAI.Application.Mechanics.DTOs
+@using global::GarageAI.Web.Services
+
+
+
+@inject MechanicApiService MechanicApiService
+
+<PageTitle>Mechanics</PageTitle>
+
+<h3>Mechanics</h3>
+
+@if (mechanics is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var mechanic in mechanics)
+            {
+                <tr>
+                    <td>@mechanic.FullName</td>
+                    <td>@mechanic.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private List<MechanicDto>? mechanics;
+
+    protected override async Task OnInitializedAsync()
+    {
+        mechanics = await MechanicApiService.GetMechanicsAsync();
+    }
+}

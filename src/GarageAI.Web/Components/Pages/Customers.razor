@@ -1,0 +1,58 @@
+﻿@page "/customers"
+
+
+
+@using global::GarageAI.Application.Customers.DTOs
+@using global::GarageAI.Web.Services
+
+@inject CustomerApiService CustomerApiService
+
+<PageTitle>Customers</PageTitle>
+
+<h3>Customers</h3>
+
+@if (customers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var customer in customers)
+            {
+                <tr>
+                    <td>@customer.FullName</td>
+                    <td>@customer.Phone</td>
+                    <td>@customer.Email</td>
+                    <td>@customer.Status</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+
+@code {
+
+    private List<CustomerDto>
+    ? customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await CustomerApiService.GetAllAsync();
+    }
+
+}

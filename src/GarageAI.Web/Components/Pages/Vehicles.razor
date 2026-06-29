@@ -1,0 +1,59 @@
+﻿@page "/vehicles"
+@using global::GarageAI.Application.Vehicles.DTOs
+@using global::GarageAI.Web.Services
+
+
+
+@inject VehicleApiService VehicleApiService
+
+<PageTitle>Vehicles</PageTitle>
+
+<h3>Vehicles</h3>
+
+@if (vehicles is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+
+        <thead>
+            <tr>
+                <th>Registration</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Mileage</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var vehicle in vehicles)
+            {
+                <tr>
+                    <td>@vehicle.RegistrationNumber</td>
+                    <td>@vehicle.Make</td>
+                    <td>@vehicle.Model</td>
+                    <td>@vehicle.Year</td>
+                    <td>@vehicle.Mileage</td>
+                    <td>@vehicle.Status</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+
+@code
+{
+    private List<VehicleDto>? vehicles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        vehicles = await VehicleApiService.GetAllAsync();
+    }
+}

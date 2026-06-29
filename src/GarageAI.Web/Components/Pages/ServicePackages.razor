@@ -1,0 +1,52 @@
+﻿@page "/servicepackages"
+
+@using global::GarageAI.Application.ServicePackages.DTOs
+@using global::GarageAI.Web.Services
+
+@inject ServicePackageApiService ServicePackageApiService
+
+<PageTitle>Service Packages</PageTitle>
+
+<h3>Service Packages</h3>
+
+@if (packages is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Discount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var package in packages)
+            {
+                <tr>
+                    <td>@package.Name</td>
+                    <td>@($"{package.Discount}%")</td>
+                    <td>@(package.IsActive ? "Active" : "Inactive")</td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+}
+
+@code {
+
+    private List<ServicePackageDto>? packages;
+
+    protected override async Task OnInitializedAsync()
+    {
+        packages = await ServicePackageApiService.GetServicePackagesAsync();
+    }
+}

@@ -1,0 +1,49 @@
+﻿@page "/services"
+@using global::GarageAI.Application.Services.DTOs
+@using global::GarageAI.Web.Services
+
+
+
+@inject ServiceApiService ServiceApiService
+
+<PageTitle>Services</PageTitle>
+
+<h3>Services</h3>
+
+@if (services is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Duration (mins)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var service in services)
+            {
+                <tr>
+                    <td>@service.Name</td>
+                    <td>@service.Price.ToString("C")</td>
+                    <td>@service.DurationMinutes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private List<ServiceDto>? services;
+
+    protected override async Task OnInitializedAsync()
+    {
+        services = await ServiceApiService.GetServicesAsync();
+    }
+}
