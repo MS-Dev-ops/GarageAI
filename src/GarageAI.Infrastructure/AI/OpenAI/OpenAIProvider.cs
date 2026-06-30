@@ -7,13 +7,13 @@ using OpenAI.Chat;
 
 namespace GarageAI.Infrastructure.AI.Orchestration;
 
-public sealed class AIOrchestrator : IAIOrchestrator
+public sealed class OpenAIProvider : IAIOrchestrator
 {
     private readonly OpenAIClient _client;
     private readonly OpenAIOptions _options;
 
 
-    public AIOrchestrator(IOptions<OpenAIOptions> options)
+    public OpenAIProvider(IOptions<OpenAIOptions> options)
     {
         _options = options.Value;
         _client = new OpenAIClient(_options.ApiKey);

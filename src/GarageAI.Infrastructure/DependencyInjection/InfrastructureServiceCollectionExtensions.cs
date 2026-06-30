@@ -1,5 +1,6 @@
 ﻿using GarageAI.Application.AI.Conversation.Ask;
 using GarageAI.Application.AI.Orchestration;
+using GarageAI.Application.AI.Orchestration.Interfaces;
 using GarageAI.Application.Bookings.Interfaces;
 using GarageAI.Application.Customers;
 using GarageAI.Application.Dashboard.Interfaces;
@@ -8,6 +9,7 @@ using GarageAI.Application.Mechanics.Interfaces;
 using GarageAI.Application.ServicePackages.Interfaces;
 using GarageAI.Application.Services.Interfaces;
 using GarageAI.Application.Vehicles;
+
 using GarageAI.Infrastructure.AI.Orchestration;
 using GarageAI.Infrastructure.Configurations;
 using GarageAI.Infrastructure.Persistence;
@@ -37,7 +39,8 @@ public static class InfrastructureServiceCollectionExtensions
             .ValidateOnStart();
 
         // AI
-        services.AddScoped<IAIOrchestrator, AIOrchestrator>();
+        services.AddScoped<IAIOrchestrator, OpenAIProvider>();
+       // services.AddScoped<IAIProvider, OpenAIProvider>();
 
         //Repositories
         services.AddScoped<ICustomerRepository, CustomerRepository>();
