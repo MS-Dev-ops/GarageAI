@@ -1,62 +1,30 @@
-using Azure.Identity;
 using GarageAI.Application.AI.Conversation.Ask;
-using GarageAI.Application.AI.Orchestration;
-using GarageAI.Application.Bookings;
-using GarageAI.Application.Bookings.Interfaces;
 using GarageAI.Application.Bookings.Queries.GetBookings;
-using GarageAI.Application.Customers;
-using GarageAI.Application.Dashboard.Interfaces;
 using GarageAI.Application.Dashboard.Queries.GetDashboard;
-using GarageAI.Application.Interfaces;
-using GarageAI.Application.Mechanics.Interfaces;
 using GarageAI.Application.Mechanics.Queries.GetMechanics;
-using GarageAI.Application.ServicePackages.Interfaces;
 using GarageAI.Application.ServicePackages.Queries.GetServicePackages;
-using GarageAI.Application.Services.Interfaces;
 using GarageAI.Application.Services.Queries.GetServices;
-using GarageAI.Application.Vehicles;
-using GarageAI.Infrastructure.AI.Orchestration;
 using GarageAI.Infrastructure.Configurations;
 using GarageAI.Infrastructure.DependencyInjection;
 using GarageAI.Infrastructure.Persistence;
-using GarageAI.Infrastructure.Repositories;
 using GarageAI.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Configuration.AddGarageAICloudConfiguration();
-Console.WriteLine("Model from App Config:");
-Console.WriteLine(builder.Configuration["OpenAI:Model"]);
 
 builder.Services.AddInfrastructure(builder.Configuration);
-// Register DbContext
 
-
-builder.Services.AddScoped<CustomerService>();
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-
-builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
-builder.Services.AddScoped<VehicleService>();
-
-builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-
+//Applications
 
 builder.Services.AddScoped<GetBookingsQueryHandler>();
-
-builder.Services.AddScoped<IMechanicRepository, MechanicRepository>();
 builder.Services.AddScoped<GetMechanicsQueryHandler>();
-
-builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<GetServicesQueryHandler>();
-
-builder.Services.AddScoped<IServicePackageRepository, ServicePackageRepository>();
 builder.Services.AddScoped<GetServicePackagesQueryHandler>();
-
-builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<GetDashboardQueryHandler>();
+builder.Services.AddScoped<AskConversationQueryHandler>();
 
 builder.Services
     .AddOptions<OpenAIOptions>()
@@ -64,15 +32,9 @@ builder.Services
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
-
-
+//API
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
-
-builder.Services.AddScoped<AskConversationQueryHandler>();
-
 
 
 var app = builder.Build();

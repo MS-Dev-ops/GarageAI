@@ -1,7 +1,17 @@
-﻿using GarageAI.Application.AI.Orchestration;
+﻿using GarageAI.Application.AI.Conversation.Ask;
+using GarageAI.Application.AI.Orchestration;
+using GarageAI.Application.Bookings.Interfaces;
+using GarageAI.Application.Customers;
+using GarageAI.Application.Dashboard.Interfaces;
+using GarageAI.Application.Interfaces;
+using GarageAI.Application.Mechanics.Interfaces;
+using GarageAI.Application.ServicePackages.Interfaces;
+using GarageAI.Application.Services.Interfaces;
+using GarageAI.Application.Vehicles;
 using GarageAI.Infrastructure.AI.Orchestration;
 using GarageAI.Infrastructure.Configurations;
 using GarageAI.Infrastructure.Persistence;
+using GarageAI.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +39,17 @@ public static class InfrastructureServiceCollectionExtensions
         // AI
         services.AddScoped<IAIOrchestrator, AIOrchestrator>();
 
+        //Repositories
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<IBookingRepository, BookingRepository>();
+        services.AddScoped<IMechanicRepository, MechanicRepository>();
+        services.AddScoped<IServiceRepository, ServiceRepository>();
+        services.AddScoped<IServicePackageRepository, ServicePackageRepository>();
+        services.AddScoped<IDashboardRepository, DashboardRepository>();
+               
+        services.AddScoped<CustomerService>();
+        services.AddScoped<VehicleService>();
         return services;
     }
 }
