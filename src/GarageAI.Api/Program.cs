@@ -21,8 +21,18 @@ using Microsoft.Extensions.Options;
 using GarageAI.Application.AI.Conversation.Ask;
 using GarageAI.Application.AI.Orchestration;
 using GarageAI.Infrastructure.AI.Orchestration;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var keyVaultUri = builder.Configuration.GetValue<string>("AzureKeyVault:VaultUri");
+
+if (!string.IsNullOrWhiteSpace(keyVaultUri))
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri(keyVaultUri),
+        new DefaultAzureCredential());
+}
 
 // Register DbContext
 builder.Services.AddDbContext<GarageDbContext>(options =>
@@ -57,6 +67,8 @@ builder.Services
     .Bind(builder.Configuration.GetSection(OpenAIOptions.SectionName))
     .ValidateDataAnnotations()
     .ValidateOnStart();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
