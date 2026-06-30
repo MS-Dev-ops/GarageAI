@@ -1,6 +1,9 @@
 @GarageAI.Api_HostAddress = http://localhost:5111
-
-GET {{GarageAI.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
 ###
+
+POST {{GarageAI.Api_HostAddress}}/api/AI/conversation
+Content-Type: application/json
+
+{
+  "message": "Hello"
+}

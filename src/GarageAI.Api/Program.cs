@@ -18,6 +18,9 @@ using GarageAI.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
 using GarageAI.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
+using GarageAI.Application.AI.Conversation.Ask;
+using GarageAI.Application.AI.Orchestration;
+using GarageAI.Infrastructure.AI.Orchestration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,12 +52,20 @@ builder.Services.AddScoped<GetServicePackagesQueryHandler>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<GetDashboardQueryHandler>();
 
-builder.Services.Configure<OpenAIOptions>(
-    builder.Configuration.GetSection(OpenAIOptions.SectionName));
+builder.Services
+    .AddOptions<OpenAIOptions>()
+    .Bind(builder.Configuration.GetSection(OpenAIOptions.SectionName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IAIOrchestrator, AIOrchestrator>();
+builder.Services.AddScoped<AskConversationQueryHandler>();
+
+
 
 var app = builder.Build();
 // Database migration and seeding
