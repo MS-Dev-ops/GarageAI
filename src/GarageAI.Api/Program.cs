@@ -1,3 +1,6 @@
+using Azure.Identity;
+using GarageAI.Application.AI.Conversation.Ask;
+using GarageAI.Application.AI.Orchestration;
 using GarageAI.Application.Bookings;
 using GarageAI.Application.Bookings.Interfaces;
 using GarageAI.Application.Bookings.Queries.GetBookings;
@@ -12,32 +15,25 @@ using GarageAI.Application.ServicePackages.Queries.GetServicePackages;
 using GarageAI.Application.Services.Interfaces;
 using GarageAI.Application.Services.Queries.GetServices;
 using GarageAI.Application.Vehicles;
+using GarageAI.Infrastructure.AI.Orchestration;
+using GarageAI.Infrastructure.Configurations;
+using GarageAI.Infrastructure.DependencyInjection;
 using GarageAI.Infrastructure.Persistence;
 using GarageAI.Infrastructure.Repositories;
 using GarageAI.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
-using GarageAI.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
-using GarageAI.Application.AI.Conversation.Ask;
-using GarageAI.Application.AI.Orchestration;
-using GarageAI.Infrastructure.AI.Orchestration;
-using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var keyVaultUri = builder.Configuration.GetValue<string>("AzureKeyVault:VaultUri");
 
-if (!string.IsNullOrWhiteSpace(keyVaultUri))
-{
-    builder.Configuration.AddAzureKeyVault(
-        new Uri(keyVaultUri),
-        new DefaultAzureCredential());
-}
+builder.Configuration.AddGarageAICloudConfiguration();
+Console.WriteLine("Model from App Config:");
+Console.WriteLine(builder.Configuration["OpenAI:Model"]);
 
+builder.Services.AddInfrastructure(builder.Configuration);
 // Register DbContext
-builder.Services.AddDbContext<GarageDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -74,7 +70,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddScoped<IAIOrchestrator, AIOrchestrator>();
+
 builder.Services.AddScoped<AskConversationQueryHandler>();
 
 
