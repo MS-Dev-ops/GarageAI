@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GarageAI.Application.AI.Orchestration.Contracts;
+using GarageAI.Application.AI.Orchestration.Interfaces;
 
-namespace GarageAI.Infrastructure.AI.Builders
+namespace GarageAI.Infrastructure.AI.Builders;
+
+public sealed class PromptBuilder : IPromptBuilder
 {
-    internal class PromptBuilder
+    public Task<string> BuildAsync(
+        AIRequest request,
+        AIContext context,
+        CancellationToken cancellationToken = default)
     {
+        // V1
+        // Return the user's prompt unchanged.
+        // Future versions will enrich it with customer,
+        // vehicle, booking and workshop context.
+
+        return Task.FromResult(request.Prompt);
     }
 }

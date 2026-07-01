@@ -9,6 +9,7 @@ using GarageAI.Application.Mechanics.Interfaces;
 using GarageAI.Application.ServicePackages.Interfaces;
 using GarageAI.Application.Services.Interfaces;
 using GarageAI.Application.Vehicles;
+using GarageAI.Infrastructure.AI.Builders;
 using GarageAI.Infrastructure.AI.OpenAI;
 using GarageAI.Infrastructure.AI.Orchestration;
 using GarageAI.Infrastructure.AI.Policies;
@@ -47,6 +48,8 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IAIProviderResolver, AIProviderResolver>();
         services.AddScoped<IExecutionPolicy, DefaultExecutionPolicy>();
         services.AddScoped<IAIPlatformOrchestrator, AIPlatformOrchestrator>();
+        services.AddScoped<IContextBuilder, ContextBuilder>();
+        services.AddScoped<IPromptBuilder, PromptBuilder>();
 
         //Repositories
         services.AddScoped<ICustomerRepository, CustomerRepository>();
