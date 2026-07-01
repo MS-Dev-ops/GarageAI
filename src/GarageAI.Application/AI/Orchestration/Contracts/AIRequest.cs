@@ -28,4 +28,6 @@ public sealed class AIRequest
 
     public AIContext Context { get; init; } = new();
 
+    public AIProviderType? Provider { get; init; }
+
 }

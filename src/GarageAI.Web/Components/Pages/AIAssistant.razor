@@ -1,0 +1,143 @@
+﻿@page "/ai"
+
+@using GarageAI.Application.AI.Orchestration.Enums
+@using Microsoft.AspNetCore.Components.Web
+@using GarageAI.Web.Services
+@inject AIApiService AIService
+
+<PageTitle>AI Assistant</PageTitle>
+
+<h3>🤖 GarageAI Assistant</h3>
+
+<div class="mb-3">
+
+    <label class="form-label">
+        AI Provider
+    </label>
+
+    <select class="form-select"
+            @bind="_provider">
+
+        <option value="Local">Local</option>
+
+        <option value="OpenAI">OpenAI</option>
+
+    </select>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-body" style="height:500px;overflow-y:auto">
+
+        @foreach (var message in _messages)
+        {
+            <div class="mb-3">
+
+                <div>
+                    <strong>You</strong>
+                </div>
+
+                <div class="border rounded p-2 bg-light">
+                    @message.UserMessage
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(message.AIMessage))
+                {
+                    <div class="mt-2">
+                        <strong>
+                            GarageAI
+                            <span class="badge @(message.Provider == "Local"
+                                      ? "bg-success"
+                                      : "bg-primary")">
+                        @message.Provider
+                    </span>
+                        </strong>
+                    </div>
+
+                    <div class="border rounded p-2">
+                        @message.AIMessage
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+    <div class="card-footer">
+
+        <div class="input-group">
+
+            <input class="form-control"
+                   @bind="_message"
+                   @bind:event="oninput"
+                   @onkeydown="HandleKeyDown"
+                   placeholder="Ask GarageAI..." />
+
+            <button class="btn btn-primary"
+                    @onclick="SendAsync"
+                    disabled="@_sending">
+
+                Send
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+@code
+{
+    private AIProviderType _provider = AIProviderType.Local;
+
+    private readonly List<ChatMessageModel> _messages = [];
+
+    private string _message = string.Empty;
+
+    private bool _sending;
+
+    private async Task SendAsync()
+    {
+        
+
+        if (string.IsNullOrWhiteSpace(_message))
+            return;
+
+        _sending = true;
+
+        var chat = new ChatMessageModel
+        {
+            UserMessage = _message,
+            Provider = _provider.ToString()
+        };
+        _messages.Add(chat);
+
+        var response = await AIService.AskAsync(_message, _provider);
+
+        chat.AIMessage = response?.Message ?? "No response.";
+
+        _message = string.Empty;
+
+        _sending = false;
+
+        StateHasChanged();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await SendAsync();
+    }
+
+    private sealed class ChatMessageModel
+    {
+        public string UserMessage { get; set; } = "";
+
+        public string AIMessage { get; set; } = "";
+
+        public string Provider { get; set; } = "";
+    }
+}

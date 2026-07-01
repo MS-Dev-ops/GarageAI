@@ -57,8 +57,12 @@ builder.Services.AddHttpClient<DashboardApiService>((sp, client) =>
     client.BaseAddress = new Uri(configuration["ApiSettings:BaseUrl"]!);
 });
 
+builder.Services.AddHttpClient<AIApiService>((sp, client) =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
 
-
+    client.BaseAddress = new Uri(configuration["ApiSettings:BaseUrl"]!);
+});
 
 
 var app = builder.Build();

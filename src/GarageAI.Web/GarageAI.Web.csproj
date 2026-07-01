@@ -10,8 +10,4 @@
     <ProjectReference Include="..\GarageAI.Application\GarageAI.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

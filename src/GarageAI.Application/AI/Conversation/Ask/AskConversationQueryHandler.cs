@@ -21,8 +21,8 @@ public sealed class AskConversationQueryHandler
         var aiRequest = new AIRequest
         {
             Prompt = query.Request.Message,
-            RequestType = AIRequestType.Conversation
-            
+            RequestType = AIRequestType.Conversation,
+            Provider = query.Request.Provider
         };
 
         var aiResponse = await _orchestrator.ExecuteAsync(
