@@ -1,12 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GarageAI.Application.AI.Orchestration.Contracts;
+using GarageAI.Application.AI.Orchestration.Interfaces;
 
-namespace GarageAI.Infrastructure.AI.Orchestration
+namespace GarageAI.Infrastructure.AI.Orchestration;
+
+public sealed class AIPlatformOrchestrator : IAIPlatformOrchestrator
 {
-    internal class AIPlatformOrchestrator
+    private readonly IExecutionPolicy _executionPolicy;
+
+    public AIPlatformOrchestrator(
+        IExecutionPolicy executionPolicy)
     {
+        _executionPolicy = executionPolicy;
+    }
+
+    public async Task<AIResponse> ExecuteAsync(
+        AIRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await _executionPolicy.ExecuteAsync(
+            request,
+            cancellationToken);
     }
 }

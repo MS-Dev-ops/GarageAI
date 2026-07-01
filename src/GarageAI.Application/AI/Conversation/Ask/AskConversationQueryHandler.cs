@@ -1,12 +1,15 @@
-﻿using GarageAI.Application.AI.Orchestration;
+﻿using GarageAI.Application.AI.Orchestration.Contracts;
+using GarageAI.Application.AI.Orchestration.Enums;
+using GarageAI.Application.AI.Orchestration.Interfaces;
 
 namespace GarageAI.Application.AI.Conversation.Ask;
 
 public sealed class AskConversationQueryHandler
 {
-    private readonly IAIOrchestrator _orchestrator;
+    private readonly IAIPlatformOrchestrator _orchestrator;
 
-    public AskConversationQueryHandler(IAIOrchestrator orchestrator)
+    public AskConversationQueryHandler(
+        IAIPlatformOrchestrator orchestrator)
     {
         _orchestrator = orchestrator;
     }
@@ -15,8 +18,20 @@ public sealed class AskConversationQueryHandler
         AskConversationQuery query,
         CancellationToken cancellationToken = default)
     {
-        return await _orchestrator.ExecuteAsync(
-            query.Request,
+        var aiRequest = new AIRequest
+        {
+            Prompt = query.Request.Message,
+            RequestType = AIRequestType.Conversation
+            
+        };
+
+        var aiResponse = await _orchestrator.ExecuteAsync(
+            aiRequest,
             cancellationToken);
+
+        return new AskConversationResponse
+        {
+            Message = aiResponse.Content
+        };
     }
 }

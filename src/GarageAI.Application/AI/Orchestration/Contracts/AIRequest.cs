@@ -26,6 +26,6 @@ public sealed class AIRequest
     /// </summary>
     public string? AgentType { get; init; }
 
-    public AIContext Context { get; init; } 
+    public AIContext Context { get; init; } = new();
 
 }
