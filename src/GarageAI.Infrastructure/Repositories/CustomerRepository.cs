@@ -1,5 +1,6 @@
 ﻿using GarageAI.Application.Interfaces;
 using GarageAI.Domain.Entities;
+using GarageAI.Domain.Enums;
 using GarageAI.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,5 +50,36 @@ public class CustomerRepository : ICustomerRepository
         _context.Customers.Remove(customer);
 
         await _context.SaveChangesAsync();
+    }
+    public async Task<List<Customer>> GetActiveAsync()
+    {
+        return await _context.Customers
+            .Where(c => c.Status == CustomerStatus.Active)
+            .OrderBy(c => c.FirstName)
+            .ToListAsync();
+    }
+
+    public async Task<Customer?> GetByNameAsync(
+        string firstName,
+        string lastName)
+    {
+        return await _context.Customers
+            .FirstOrDefaultAsync(c =>
+                c.FirstName == firstName &&
+                c.LastName == lastName);
+    }
+
+    public async Task<Customer?> GetByPhoneAsync(string phone)
+    {
+        return await _context.Customers
+            .FirstOrDefaultAsync(c =>
+                c.Phone == phone);
+    }
+
+    public async Task<Customer?> GetByEmailAsync(string email)
+    {
+        return await _context.Customers
+            .FirstOrDefaultAsync(c =>
+                c.Email == email);
     }
 }

@@ -4,20 +4,34 @@ public static class DashboardFeatureDetector
 {
     public static DashboardFeatureIntent Detect(string prompt)
     {
-        prompt = prompt.ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(prompt))
+            return DashboardFeatureIntent.Unknown;
 
-        if (prompt.Contains("customer"))
+        var lower = prompt.ToLowerInvariant();
+
+        // Dashboard requests only
+        if (!(lower.Contains("dashboard") ||
+              lower.Contains("overview") ||
+              lower.Contains("summary") ||
+              lower.Contains("statistics") ||
+              lower.Contains("stats")))
+        {
+            return DashboardFeatureIntent.Unknown;
+        }
+
+        if (lower.Contains("customer"))
             return DashboardFeatureIntent.CustomerCount;
 
-        if (prompt.Contains("vehicle"))
+        if (lower.Contains("vehicle"))
             return DashboardFeatureIntent.VehicleCount;
 
-        if (prompt.Contains("booking"))
+        if (lower.Contains("booking"))
             return DashboardFeatureIntent.BookingCount;
 
-        if (prompt.Contains("mechanic"))
+        if (lower.Contains("mechanic"))
             return DashboardFeatureIntent.MechanicCount;
 
+        // Generic dashboard request
         return DashboardFeatureIntent.Unknown;
     }
 }

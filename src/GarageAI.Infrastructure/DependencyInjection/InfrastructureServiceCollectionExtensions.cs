@@ -1,10 +1,12 @@
-﻿using GarageAI.Application.AI.Conversation.Ask;
-using GarageAI.Application.AI.Features.Customers;
+﻿using GarageAI.Application.AI.Features.Customers;
 using GarageAI.Application.AI.Features.Dashboard;
-using GarageAI.Application.AI.Orchestration;
 using GarageAI.Application.AI.Orchestration.Interfaces;
 using GarageAI.Application.Bookings.Interfaces;
 using GarageAI.Application.Customers;
+using GarageAI.Application.Customers.Queries.GetActiveCustomers;
+using GarageAI.Application.Customers.Queries.GetCustomerByEmail;
+using GarageAI.Application.Customers.Queries.GetCustomerByName;
+using GarageAI.Application.Customers.Queries.GetCustomerByPhone;
 using GarageAI.Application.Customers.Queries.GetCustomers;
 using GarageAI.Application.Interfaces;
 using GarageAI.Application.Mechanics.Interfaces;
@@ -46,7 +48,7 @@ public static class InfrastructureServiceCollectionExtensions
             .ValidateOnStart();
 
         // AI
-      
+
         services.AddScoped<IAIProvider, OpenAIProvider>();
 
         // AI Platform
@@ -61,7 +63,7 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IDashboardFeature, DashboardFeature>();
         services.AddScoped<ICustomerFeature, CustomerFeature>();
 
-      
+
 
         //Repositories
         services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -71,12 +73,16 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IServiceRepository, ServiceRepository>();
         services.AddScoped<IServicePackageRepository, ServicePackageRepository>();
         services.AddScoped<IDashboardRepository, DashboardRepository>();
-               
+
         services.AddScoped<CustomerService>();
         services.AddScoped<VehicleService>();
 
-
+        //QueryHandlers
         services.AddScoped<GetCustomersQueryHandler>();
+        services.AddScoped<GetActiveCustomersQueryHandler>();
+        services.AddScoped<GetCustomerByNameQueryHandler>();
+        services.AddScoped<GetCustomerByPhoneQueryHandler>();
+        services.AddScoped<GetCustomerByEmailQueryHandler>();
         return services;
     }
 }

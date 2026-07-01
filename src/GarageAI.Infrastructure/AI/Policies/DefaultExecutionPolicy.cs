@@ -36,6 +36,8 @@ public sealed class DefaultExecutionPolicy : IExecutionPolicy
 
         var provider = _providerResolver.Resolve(providerType);
 
+        var providerName = provider.GetType().FullName;
+
         return await provider.ExecuteAsync(
             request,
             cancellationToken);

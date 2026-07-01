@@ -8,9 +8,13 @@ public enum CustomerFeatureIntent
 
     ListCustomers,
 
+    ListActiveCustomers,
+
     FindCustomerByName,
 
     FindCustomerByPhone,
 
-    FindCustomerByEmail
+    FindCustomerByEmail,
+
+    CustomerDetails
 }

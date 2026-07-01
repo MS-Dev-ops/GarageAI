@@ -25,6 +25,18 @@ public sealed class LocalAIProvider : IAIProvider
         AIRequest request,
         CancellationToken cancellationToken = default)
     {
+
+        var customerRequest =
+  CustomerFeatureDetector.Detect(request.Prompt);
+
+        if (customerRequest.Intent != CustomerFeatureIntent.Unknown)
+        {
+            return await _customerFeature.ExecuteAsync(
+                request,
+                cancellationToken);
+        }
+
+
         var dashboardIntent =
             DashboardFeatureDetector.Detect(request.Prompt);
 
@@ -35,15 +47,7 @@ public sealed class LocalAIProvider : IAIProvider
                 cancellationToken);
         }
 
-        var customerIntent =
-    CustomerFeatureDetector.Detect(request.Prompt);
-
-        if (customerIntent != CustomerFeatureIntent.Unknown)
-        {
-            return await _customerFeature.ExecuteAsync(
-                request,
-                cancellationToken);
-        }
+      
 
         var intent = LocalIntentDetector.Detect(request.Prompt);
 
