@@ -1,4 +1,5 @@
 ﻿using GarageAI.Application.AI.Conversation.Ask;
+using GarageAI.Application.AI.Features.Dashboard;
 using GarageAI.Application.AI.Orchestration;
 using GarageAI.Application.AI.Orchestration.Interfaces;
 using GarageAI.Application.Bookings.Interfaces;
@@ -10,6 +11,7 @@ using GarageAI.Application.ServicePackages.Interfaces;
 using GarageAI.Application.Services.Interfaces;
 using GarageAI.Application.Vehicles;
 using GarageAI.Infrastructure.AI.Builders;
+using GarageAI.Infrastructure.AI.Features.Dashboard;
 using GarageAI.Infrastructure.AI.Local;
 using GarageAI.Infrastructure.AI.OpenAI;
 using GarageAI.Infrastructure.AI.Orchestration;
@@ -52,6 +54,8 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IContextBuilder, ContextBuilder>();
         services.AddScoped<IPromptBuilder, PromptBuilder>();
         services.AddScoped<IAIProvider, LocalAIProvider>();
+
+        services.AddScoped<IDashboardFeature, DashboardFeature>();
 
         //Repositories
         services.AddScoped<ICustomerRepository, CustomerRepository>();
