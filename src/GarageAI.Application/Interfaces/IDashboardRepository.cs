@@ -1,6 +1,6 @@
 ﻿using GarageAI.Application.Dashboard.DTOs;
 
-namespace GarageAI.Application.Dashboard.Interfaces;
+namespace GarageAI.Application.Interfaces;
 
 public interface IDashboardRepository
 {

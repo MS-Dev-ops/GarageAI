@@ -15,6 +15,7 @@
     <Folder Include="AI\Automation\" />
     <Folder Include="AI\Vision\" />
     <Folder Include="AI\Voice\" />
+    <Folder Include="Dashboard\Interfaces\" />
   </ItemGroup>
 
 </Project>

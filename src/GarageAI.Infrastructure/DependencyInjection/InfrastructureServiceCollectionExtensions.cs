@@ -1,16 +1,18 @@
 ﻿using GarageAI.Application.AI.Conversation.Ask;
+using GarageAI.Application.AI.Features.Customers;
 using GarageAI.Application.AI.Features.Dashboard;
 using GarageAI.Application.AI.Orchestration;
 using GarageAI.Application.AI.Orchestration.Interfaces;
 using GarageAI.Application.Bookings.Interfaces;
 using GarageAI.Application.Customers;
-using GarageAI.Application.Dashboard.Interfaces;
+using GarageAI.Application.Customers.Queries.GetCustomers;
 using GarageAI.Application.Interfaces;
 using GarageAI.Application.Mechanics.Interfaces;
 using GarageAI.Application.ServicePackages.Interfaces;
 using GarageAI.Application.Services.Interfaces;
 using GarageAI.Application.Vehicles;
 using GarageAI.Infrastructure.AI.Builders;
+using GarageAI.Infrastructure.AI.Features.Customers;
 using GarageAI.Infrastructure.AI.Features.Dashboard;
 using GarageAI.Infrastructure.AI.Local;
 using GarageAI.Infrastructure.AI.OpenAI;
@@ -55,7 +57,11 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IPromptBuilder, PromptBuilder>();
         services.AddScoped<IAIProvider, LocalAIProvider>();
 
+        //AI Features
         services.AddScoped<IDashboardFeature, DashboardFeature>();
+        services.AddScoped<ICustomerFeature, CustomerFeature>();
+
+      
 
         //Repositories
         services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -68,6 +74,9 @@ public static class InfrastructureServiceCollectionExtensions
                
         services.AddScoped<CustomerService>();
         services.AddScoped<VehicleService>();
+
+
+        services.AddScoped<GetCustomersQueryHandler>();
         return services;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using GarageAI.Application.Dashboard.DTOs;
-using GarageAI.Application.Dashboard.Interfaces;
+using GarageAI.Application.Interfaces;
 using GarageAI.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
